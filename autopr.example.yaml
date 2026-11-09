@@ -1,0 +1,42 @@
+# Copy this file to autopr.yaml and edit the values for your repository.
+repo:
+  path: "/path/to/your/repo"
+  remote_url: "https://github.com/your-org/your-repo"
+  base_branch: "main"
+  branch_prefix: "autopr/"
+  health_checks:
+    commands:
+      - "make check"
+      - "make test"
+    timeout_seconds: 300
+    max_fix_attempts: 3
+  include_paths:
+    - "src"
+  exclude_paths:
+    - "node_modules"
+    - ".git"
+    - "__pycache__"
+    - ".venv"
+    - "dist"
+    - "build"
+    - ".next"
+  min_confidence: 0.8
+
+max_concurrent_prs: 3
+dry_run: false
+push_to_remote: true
+create_github_pr: true
+model: "sonnet"
+reviewer_model: "sonnet"
+verbose: false
+
+research:
+  pre_deploy_check: "pnpm run build"
+  target_pages:
+    - "/"
+    - "/login"
+    - "/dashboard"
+  deploy:
+    command: "vercel deploy --yes"  # replace with your deploy command
+  lighthouse:
+    command: "lighthouse {url} --preset=perf --quiet --chrome-flags='--headless' --output=json --output-path=stdout"
